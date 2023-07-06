@@ -29,15 +29,18 @@ public class Service {
     @Column(name = "service_detail")
     private String detail;
 
+    @Column(name = "isSelected")
+    private Boolean isSelected;
+
 //    @Column(name = "service_price", columnDefinition = "DECIMAL(8, 2)")
 //    @DecimalMin(value = "0.0", inclusive = false)
 //    @Digits(integer = 6, fraction = 2)
 //    private Double price;
 //
-//    @ManyToOne
-//    @JsonIgnoreProperties(value = {"service", "handler","hibernateLazyInitializer"}, allowSetters = true)
-//    @JoinColumn(name = "serviceId")
-//    private Appointment appointment;
+    @ManyToOne
+    @JsonIgnoreProperties(value = {"service", "handler","hibernateLazyInitializer"}, allowSetters = true)
+    @JoinColumn(name = "serviceId")
+    private Appointment appointment;
 
 
 }

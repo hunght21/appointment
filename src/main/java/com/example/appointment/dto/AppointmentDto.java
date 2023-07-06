@@ -26,7 +26,9 @@ public class AppointmentDto {
 
     private Long doctorId;
 
- //   private List<Service> services;
+    private String status;
+
+    private Collection<Service> services;
 
 
 }

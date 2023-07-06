@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import retrofit2.http.Multipart;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,11 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public Optional<Doctor> findById(Long aLong) {
         return doctorRepository.findById(aLong);
+    }
+
+    @Override
+    public Doctor save(Doctor doctor, MultipartFile file) {
+        return doctorRepository.save(doctor);
     }
 
     @Override

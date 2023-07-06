@@ -1,9 +1,12 @@
 package com.example.appointment.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.util.Collection;
 import java.util.Date;
 @Getter
 @Setter
@@ -11,6 +14,7 @@ import java.util.Date;
 @Table(name = "patient")
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "patientId")
 public class Patient {
 
     @Id
@@ -41,6 +45,8 @@ public class Patient {
     @Column(name = "password")
     private String password;
 
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
+    private Collection<Medicine> medicines;
 
     public Long getPatientId() {
         return patientId;

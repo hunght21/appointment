@@ -3,7 +3,10 @@ package com.example.appointment.controller;
 
 import com.example.appointment.dto.PatientDto;
 import com.example.appointment.model.Patient;
+import com.example.appointment.service.MedicineService;
 import com.example.appointment.service.PatientService;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.micrometer.common.util.StringUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -24,10 +27,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
+
 public class PatientController {
 
     @Autowired
     private PatientService patientService;
+    @Autowired
+    private MedicineService medicineService;
 
     //Register patient
     @PostMapping("/newPatient")
@@ -56,9 +62,11 @@ public class PatientController {
         String birthYearStr = patientDto.getBirthYear();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date birthYearDate = formatter.parse(birthYearStr);
+        patient.setBirthYear(birthYearDate);
         patientService.save(patient);
         return ResponseEntity.ok("successfully");
     }
+
 
     private boolean isValidEmail(String email) {
         String regex = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$";
@@ -66,7 +74,7 @@ public class PatientController {
     }
     //Get patient by Id
     @GetMapping("/patients/{id}")
-    public ResponseEntity<?> getDoctorById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<?> getPatientById(@PathVariable(name = "id") Long id) {
         Optional<Patient> patient = patientService.findById(id);
         if (patient.isEmpty()) {
             return ResponseEntity.ok("Null");
@@ -90,5 +98,19 @@ public class PatientController {
             return ResponseEntity.ok("Null");
         }
         return ResponseEntity.ok(patient);
+    }
+
+    @PostMapping("/patients")
+    public ResponseEntity<?> updateByEmail(@RequestParam(name = "email") String email) {
+        Patient patient = patientService.findByEmail(email);
+        if (patient == null) {
+            return ResponseEntity.ok("Null");
+        }
+        Patient patient1 = patientService.save1(patient);
+        return ResponseEntity.ok(patient1);
+    }
+    @GetMapping("/patient/{patientId}/medicine/list")
+    public ResponseEntity<?> getAllServiceByPatient(@PathVariable(name = "patientId") Long patientId){
+        return ResponseEntity.ok().body(patientService.getAllMedicinePatient(patientId));
     }
 }

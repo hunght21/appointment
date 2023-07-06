@@ -1,6 +1,8 @@
 package com.example.appointment.service;
 
+import com.example.appointment.model.Medicine;
 import com.example.appointment.model.Patient;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ public interface PatientService {
 
     <S extends Patient> S save(S entity);
 
+    public Patient save1(Patient patient);
     Optional<Patient> findById(Long aLong);
 
     boolean existsPatientByPhone(Long phone);
@@ -29,4 +32,6 @@ public interface PatientService {
     Patient findByEmailAndPassword(String email, String password);
 
     Patient findByEmail(String email);
+    @Transactional
+    List<Medicine> getAllMedicinePatient(Long patientId);
 }

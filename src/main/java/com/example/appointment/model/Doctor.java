@@ -21,7 +21,8 @@ public class Doctor {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "avatar", nullable = false)
+    @Lob
+    @Column(name = "avatar",columnDefinition = "MEDIUMBLOB")
     private String avatar;
 
     @Column(name = "email", nullable = false)
@@ -33,6 +34,8 @@ public class Doctor {
 
     @Column(name = "day")
     private String day;
+
+
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = {"doctors", "handler","hibernateLazyInitializer"}, allowSetters = true)

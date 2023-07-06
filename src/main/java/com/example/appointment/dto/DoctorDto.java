@@ -29,4 +29,6 @@ public class DoctorDto {
     private Specialist specialist;
 
     private Collection<Time> times;
+
+
 }

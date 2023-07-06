@@ -1,6 +1,8 @@
 package com.example.appointment.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +15,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "appointment")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class Appointment {
 
     @Id
@@ -28,6 +32,16 @@ public class Appointment {
     @Column(name = "note")
     private String note;
 
+    @Column(name = "status")
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
     @ManyToOne
     @JsonIgnoreProperties(value = {"Appointment", "handler","hibernateLazyInitializer"}, allowSetters = true)
     @JoinColumn(name = "patientId")
@@ -38,8 +52,8 @@ public class Appointment {
     @JoinColumn(name = "doctorId")
     private Doctor doctor;
 
-//    @OneToMany(mappedBy = "appointment", fetch = FetchType.LAZY)
-//    private Collection<Service>  services;
+    @OneToMany(mappedBy = "appointment", fetch = FetchType.LAZY)
+    private Collection<Service>  services;
 
 //    @ManyToMany(fetch = FetchType.EAGER)
 //    @JoinTable(
@@ -52,13 +66,23 @@ public class Appointment {
     public Appointment() {
     }
 
-    public Appointment(Long id, String appointmentDate, String period, String note, Patient patient, Doctor doctor) {
+    public Appointment(Long id, String appointmentDate, String period, String note, String status, Patient patient, Doctor doctor, Collection<Service> services) {
         this.id = id;
         this.appointmentDate = appointmentDate;
         this.period = period;
         this.note = note;
+        this.status = status;
         this.patient = patient;
         this.doctor = doctor;
+        this.services = services;
+    }
+
+    public Collection<Service> getServices() {
+        return services;
+    }
+
+    public void setServices(Collection<Service> services) {
+        this.services = services;
     }
 
     public Long getId() {
