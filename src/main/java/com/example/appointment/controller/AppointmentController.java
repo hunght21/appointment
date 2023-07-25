@@ -89,6 +89,19 @@ public class AppointmentController {
 
         return ResponseEntity.ok(appointments);
     }
+
+    @PostMapping("/appointments/{id}")
+    public ResponseEntity<?> updateAppointmentById(@RequestBody AppointmentDto appointmentDto, @PathVariable(name = "id") Long id) {
+        Appointment appointment = appointmentService.getAppointmentById(id);
+
+        appointment.setId(appointmentDto.getId());
+        appointment.setPeriod(appointmentDto.getPeriod());
+        appointment.setNote(appointmentDto.getNote());
+        appointment.setStatus("pending");
+        appointment.setAppointmentDate(appointmentDto.getAppointmentDate());
+        appointmentService.save(appointment);
+        return ResponseEntity.ok("successfully");
+    }
     @DeleteMapping("/appointments/{id}")
     public ResponseEntity<?> deleteAppointmentById(@PathVariable(name = "id") Long id) {
         Appointment appointments = appointmentRepository.findById(id)

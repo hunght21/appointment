@@ -101,14 +101,27 @@ public class PatientController {
     }
 
     @PostMapping("/patients")
-    public ResponseEntity<?> updateByEmail(@RequestParam(name = "email") String email) {
-        Patient patient = patientService.findByEmail(email);
-        if (patient == null) {
-            return ResponseEntity.ok("Null");
-        }
-        Patient patient1 = patientService.save1(patient);
-        return ResponseEntity.ok(patient1);
+    public ResponseEntity<Patient> updatePatientByEmail(@PathVariable("email") String email, @RequestBody PatientDto patient) {
+             Patient existingPatient = patientService.findByEmail(email);
+            existingPatient.setName(patient.getName());
+            existingPatient.setAddress(patient.getAddress());
+            existingPatient.setIdCard(patient.getIdCard());
+            existingPatient.setPhone(patient.getPhone());
+            // Lưu thông tin bệnh nhân đã cập nhật vào cơ sở dữ liệu
+            patientService.save(existingPatient);
+            return ResponseEntity.ok(existingPatient);
+
     }
+
+//    @PostMapping("/patients")
+//    public ResponseEntity<?> updateByEmail(@RequestParam(name = "email") String email, @RequestBody PatientDto patientDto) {
+//        Patient patient = patientService.findByEmail(email);
+//        if (patient == null) {
+//            return ResponseEntity.ok("Null");
+//        }
+//        Patient patient1 = patientService.save1(patient);
+//        return ResponseEntity.ok(patient1);
+//    }
     @GetMapping("/patient/{patientId}/medicine/list")
     public ResponseEntity<?> getAllServiceByPatient(@PathVariable(name = "patientId") Long patientId){
         return ResponseEntity.ok().body(patientService.getAllMedicinePatient(patientId));

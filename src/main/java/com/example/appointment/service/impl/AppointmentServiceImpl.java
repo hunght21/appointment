@@ -1,6 +1,7 @@
 package com.example.appointment.service.impl;
 
 
+import com.example.appointment.Exceptions.ResourceNotFoundException;
 import com.example.appointment.model.Appointment;
 import com.example.appointment.model.Doctor;
 import com.example.appointment.model.Patient;
@@ -25,6 +26,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<Appointment> findByDoctor(Doctor doctor) {
         return appointmentRepository.findByDoctor(doctor);
+    }
+
+    @Override
+    public Appointment getAppointmentById(Long appointmentId) {
+        return appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Service", "service id", appointmentId));
     }
 
     @Override
